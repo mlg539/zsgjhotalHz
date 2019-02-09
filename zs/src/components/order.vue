@@ -4,7 +4,7 @@
         <el-row type="flex" class="row-bg" justify="center">
                 <el-col :span="18">
                     <div class="grid-content ">
-                        <el-form ref="form" :model="form" label-width="80px">
+                        <el-form ref="form" :model="form" label-width="90px" :rules="rules" size="medium">
                                 <el-form-item label="酒店名称">
                                   <el-input v-model="form.name"  readonly ></el-input>
                                 </el-form-item>
@@ -42,7 +42,59 @@
                                           width="180">
                                         </el-table-column>
                                       </el-table>
-                                </el-form-item>                              
+                                </el-form-item>   
+                                <el-form-item label="入住人姓名" prop="name">                                   
+                                        <el-input v-model="form.username"></el-input>
+                                        <span>预订几间填写几个人姓名，用空格隔开</span>
+                                </el-form-item>
+                                <el-form-item label="手机号码" prop="phone">                                   
+                                        <el-input v-model="form.phone"></el-input>
+                                        <span>我们将以短信息的形式发送确认信息(酒店名称、地址、前台电话)</span>
+                                </el-form-item>
+                                <el-form-item label="邮件" prop="email">                                   
+                                        <el-input v-model="form.email"></el-input>
+                                        <span> 外宾请填写E-mail，以便发送确认邮件</span>
+                                </el-form-item>
+                                <el-form-item label="证件类型" prop="region" >
+                                        <el-select v-model="form.region" placeholder="请选择">
+                                            <el-option label="内宾(持大陆身份证)" value="idcard"></el-option>
+                                            <el-option label="港澳台(持回乡证/台胞证等)" value="tho"></el-option>
+                                            <el-option label="侨胞(持中国护照)" value="tho"></el-option>
+                                            <el-option label="护外国护照的外宾" value="tho"></el-option>
+                                        </el-select>
+                                        <span>请选择您有效证件类型，便于酒店前台登记</span>
+                                </el-form-item>
+                                <el-form-item label="预订提示" required>                                   
+                                              <span style="color: red;"> 本酒店最晚保留到18点,超过18点请在特殊要求内注明具体到达时间及原因</span>
+                                      </el-form-item>
+                                <el-form-item label="到店时间" required>
+                                    <el-form-item prop="date2">
+                                      <el-time-picker type="fixed-time" placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
+                                    </el-form-item>
+                                </el-form-item>
+                                <el-form-item label="特殊要求">
+                                      <span style="color: red;"> (请输入特殊要求，我们会与酒店确认，但因酒店原因你的一些要求不能保证实现，或酒店可能额外收费)</span>
+                                </el-form-item>
+                                <el-form-item  prop="desc">
+                                  <el-select
+                                    v-model="form.value10"
+                                    multiple
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="请写入或者选择特殊要求">
+                                    <el-option
+                                      v-for="item in form.options5"
+                                      :key="item.value"
+                                      :label="item.label"
+                                      :value="item.value">
+                                    </el-option>
+                                  </el-select>
+                                </el-form-item>
+                                <el-form-item>
+                                  <el-button type="primary" @click="submitForm('form')">立即预订</el-button>
+                                  <el-button @click="resetForm('form')">重置</el-button>
+                                </el-form-item>
                                 <el-form-item label="温馨提示" style="color: red;text-align: left">                                 
                                       <p>1、修改入住和离店日期后请留意价格的变动！</p>
                                       <p>2、晚上21：00至8：30为预订中心非工作时间，此时间段的订单将于隔日上班后优先处理！</p>
@@ -52,53 +104,7 @@
                 </el-col>
         </el-row>
 
-        <el-row type="flex" class="row-bg" justify="center">
-                <el-col :span="18">
-                    <div class="grid-content ">                          
-                            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                                    <el-form-item label="入住人姓名" prop="name">                                   
-                                            <el-input v-model="ruleForm.name"></el-input>
-                                            <span>预订几间填写几个人姓名，用空格隔开</span>
-                                    </el-form-item>
-                                    <el-form-item label="手机号码" prop="phone">                                   
-                                            <el-input v-model="ruleForm.phone"></el-input>
-                                            <span>我们将以短信息的形式发送确认信息(酒店名称、地址、前台电话)</span>
-                                    </el-form-item>
-                                    <el-form-item label="邮件" prop="email">                                   
-                                            <el-input v-model="ruleForm.email"></el-input>
-                                            <span> 外宾请填写E-mail，以便发送确认邮件</span>
-                                    </el-form-item>
-                                    <el-form-item label="证件类型" prop="region" >
-                                            <el-select v-model="ruleForm.region" placeholder="请选择">
-                                                <el-option label="内宾(持大陆身份证)" value="idcard"></el-option>
-                                                <el-option label="港澳台(持回乡证/台胞证等)" value="tho"></el-option>
-                                                <el-option label="侨胞(持中国护照)" value="tho"></el-option>
-                                                <el-option label="护外国护照的外宾" value="tho"></el-option>
-                                            </el-select>
-                                            <span>请选择您有效证件类型，便于酒店前台登记</span>
-                                    </el-form-item>
-                                    <el-form-item label="预订提示" required>                                   
-                                                  <span style="color: red;"> 本酒店最晚保留到18点,超过18点请在特殊要求内注明具体到达时间及原因</span>
-                                          </el-form-item>
-                                    <el-form-item label="到店时间" required>
-                                        <el-form-item prop="date2">
-                                          <el-time-picker type="fixed-time" placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-                                        </el-form-item>
-                                    </el-form-item>
-                                    <el-form-item label="特殊要求">
-                                          <span style="color: red;"> (请输入特殊要求，我们会与酒店确认，但因酒店原因你的一些要求不能保证实现，或酒店可能额外收费)</span>
-                                    </el-form-item>
-                                    <el-form-item  prop="desc">
-                                      <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-                                    </el-form-item>
-                                    <el-form-item>
-                                      <el-button type="primary" @click="submitForm('ruleForm','form')">立即预订</el-button>
-                                      <el-button @click="resetForm('ruleForm')">重置</el-button>
-                                    </el-form-item>
-                            </el-form>
-                    </div>
-                </el-col>
-        </el-row>
+
     </div>
 </template>
 
@@ -114,19 +120,25 @@
             roomNum:1,
             personsNum:1,
             delivery: false,
-          },
-          ruleForm: {
-               name: '',
-               phone:"",
-               email:"",
-               region: '',
-               date2: '13',
-               delivery: false,
-               resource: '',
-               desc: ''
+            username:"",
+            phone:'',
+            email:"",
+            region: '',
+            date2: '13',  
+            options5: [{
+               value: '安排无烟楼层',
+               label: '安排无烟楼层'
+             }, {
+               value: '安排吸烟楼层',
+               label: '安排吸烟楼层'
+             }, {
+               value: '房间可以看见市景',
+               label: '房间可以看见市景'
+             }],
+            value10: []        
           },
           rules: {
-             name: [
+             username: [
                { required: true, message: '请输入入住人姓名', trigger: 'blur' },
                { min: 2,  message: '姓名不得少于2个字', trigger: 'blur' }
              ],
@@ -144,9 +156,6 @@
              date2: [
                { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
              ],
-             desc: [
-               { required: false, message: '请填写特殊情况', trigger: 'blur' }
-             ]
           }   
       
           }
@@ -156,13 +165,13 @@
    
       },
       methods: {
-        submitForm(formName,formName1) {
+        submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             console.log(this.form)
-            console.log(this.ruleForm)
+ 
             var url="http://127.0.0.1:3000/order/confirm"
-            var body={aa:this.form,bb:this.ruleForm,cc:this.tableData}
+            var body={aa:this.form,cc:this.tableData}
            this.axios.post(url,body).then((res)=>{
              console.log(res)
              alert(res.data.msg)

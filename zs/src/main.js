@@ -16,6 +16,7 @@ Vue.prototype.axios=axios;
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
+//设置天数的过滤器
 Vue.filter("datefilter",function(val){
   if(val.length>0){
   var day=(new Date(val[1])-new Date(val[0]))/24/60/60/1000;
@@ -23,7 +24,36 @@ Vue.filter("datefilter",function(val){
   return `${day}天`
 }
 
-})
+});
+//设置房型的过滤器
+Vue.filter("roomname",function(val){
+  switch(val){
+    case 'deluxebusinessroom':
+      val="豪华商务房";
+      break;
+    case 'deluxeroom':
+      val="豪华房";
+      break;
+    case 'executiveroom':
+      val="行政房";
+      break;
+    case 'lakeviewroom':
+      val="湖景房";
+      break;
+    case 'suite':
+      val="公寓套房";
+      break;
+    case 'superiorroom':
+      val="高级房";
+      break;
+    default:
+      val="梦幻家庭房"
+  }
+ 
+  return val
+}
+
+)
 
 /* eslint-disable no-new */
 new Vue({

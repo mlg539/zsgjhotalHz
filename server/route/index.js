@@ -5,21 +5,19 @@ const pool = require("../pool");
 
 
 //功能一  当选定日期时返回价格
-router.get("/getprice/:range/:room",(req,res)=>{
-    var range=req.params.range
-    var room=req.params.room
-    console.log(range,room)
-    if(!range){
-        res.send({code:-1,msg:"日期不存在"})
-        return
-    }
-   var  tableData=[
-        {date: '05-03',price: '479'},  
-        {date: '05-03',price: '479'},  
-        {date: '05-04',price: '479'},  
-      ]
+router.get("/getmessage",(req,res)=>{
+    var sql="SELECT * FROM hotel"
+    pool.query(sql,(err,result)=>{
+        if(err) throw err
+        if(result.length>0){
+            console.log(result)
+            res.send({code:1,data:result})
+   
+        }else{
+            res.send({code:-1,msg:"信息不存在"})
+        }
+    })
 
-    res.send({code:1,data:tableData})
 })
 //功能二  接收客人的订单信息
 router.post("/confirm",(req,res)=>{

@@ -4,6 +4,10 @@ const cors = require("cors");
 const bodyParser=require('body-parser');
 const session = require("express-session");
 const orderRouter=require("./route/order")
+const indexRouter=require("./route/index")
+const commentRouter=require("./route/comment")
+const bookingRouter=require("./route/booking")
+const picturesRouter=require("./route/pictures")
 
 var app = express();
 app.listen(3000,()=>{
@@ -37,6 +41,9 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 //挂在路由
 app.use("/order",orderRouter)
+app.use("/index",indexRouter)
+app.use("/comment",commentRouter)
+app.use("/pictures",picturesRouter)
 
 
 
